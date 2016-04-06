@@ -2,6 +2,7 @@
 
 if [ "${TRAVIS_BRANCH}" != "master" ]
 then
+    echo "Not master branch. Skipping"
     exit 0
 fi
 
