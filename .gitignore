@@ -1,0 +1,6 @@
+*.pyc
+install.log
+miniconda.sh
+dist
+miniconda
+*.egg-info
