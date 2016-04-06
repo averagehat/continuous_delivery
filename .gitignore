@@ -4,3 +4,4 @@ miniconda.sh
 dist
 miniconda
 *.egg-info
+build
