@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
-import continous_delivery
+import continuous_delivery
 
 setup(
-    name = continous_delivery.__projectname__,
-    version = continous_delivery.__release__,
+    name = continuous_delivery.__projectname__,
+    version = continuous_delivery.__release__,
     packages = find_packages(),
-    author = continous_delivery.__authors__,
-    author_email = continous_delivery.__authoremails__,
-    description = continous_delivery.__description__,
+    author = continuous_delivery.__authors__,
+    author_email = continuous_delivery.__authoremails__,
+    description = continuous_delivery.__description__,
     license = "GPLv2",
-    keywords = continous_delivery.__keywords__,
+    keywords = continuous_delivery.__keywords__,
 )
