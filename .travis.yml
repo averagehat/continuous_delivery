@@ -5,5 +5,9 @@ python:
 install:
     - ./install.sh miniconda
     - export PATH=$PWD/miniconda/bin:$PATH
+before_script:
+    - 'echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"'
+    - '.travis/master.sh'
+    - '.travis/develop.sh'
 script:
-    - nosetests test_code.py
+    - nosetests -v test_code.py
