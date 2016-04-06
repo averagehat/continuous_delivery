@@ -5,7 +5,9 @@ python:
 install:
     - ./install.sh miniconda
     - export PATH=$PWD/miniconda/bin:$PATH
+before_script:
+    - 'echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"'
+    - '[ "$TRAVIS_BRANCH" = "master" ] && .travis/master.sh'
+    - '[ "$TRAVIS_BRANCH" = "develop" ] && .travis/develop.sh'
 script:
-    - '[ "$TRAVIS_BRANCH" == "master" ] && .travis/in_commit.sh CHANGELOG.rst'
-    - '[ "$TRAVIS_BRANCH" == "develop" ] && .travis/in_commit.sh CHANGELOG.rst docs'
-    - nosetests test_code.py
+    - nosetests -v test_code.py
