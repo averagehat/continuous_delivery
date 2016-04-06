@@ -7,7 +7,9 @@ install:
     - export PATH=$PWD/miniconda/bin:$PATH
 before_script:
     - 'echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"'
+    - 'echo "TRAVIS_TAG: $TRAVIS_TAG"'
     - '.travis/master.sh'
     - '.travis/develop.sh'
+    - '.travis/tag.sh'
 script:
-    - nosetests -v test_code.py
+    - nosetests -v tests
