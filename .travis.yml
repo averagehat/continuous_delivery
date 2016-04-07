@@ -13,3 +13,5 @@ before_script:
     - '.travis/tag.sh'
 script:
     - nosetests -v tests
+after_success:
+    - .travis/push_release_tag.sh
