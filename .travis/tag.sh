@@ -7,6 +7,5 @@ then
 fi
 
 set -e
-
-# Make sure version is changed
-git diff $(basename $TRAVIS_REPO_SLUG)/__init__.py | grep -q '^.__version__'
+# Ensure version changed
+.travis/version_updated.sh
