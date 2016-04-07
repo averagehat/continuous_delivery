@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.0.4
+-------------
+
+- Release has the v in front of it now
+
 Version 0.0.3
 -------------
 
