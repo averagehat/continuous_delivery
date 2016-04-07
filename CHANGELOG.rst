@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.0.5
+-------------
+
+- Silence the release push so github key not shown
+
 Version 0.0.4
 -------------
 
