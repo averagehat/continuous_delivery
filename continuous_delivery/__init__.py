@@ -1,9 +1,9 @@
-__projectname__ = 'continous_delivery'
-__version__ = '1.0.0'
+__projectname__ = 'continuous_delivery'
+__version__ = '1.0.1'
 __release__ = __version__
 __authors__ = 'Tyghe Vallard'
 __authoremails__ = 'vallardt@gmail.com'
-__description__ = 'Travis + Github continous delivery testing'
+__description__ = 'Travis + Github continuous delivery testing'
 __license__ = ''
 __keywords__ = ''
 __url__ = 'https://github.com/necrolyte2/' + __projectname__

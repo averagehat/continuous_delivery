@@ -1,6 +1,16 @@
 Changelog
 =========
 
+Version 1.0.1
+-------------
+
+- Fixed the name in various places from continous to continuous
+
+Version 1.0.0
+-------------
+
+- Stable release that is working
+
 Version 0.0.6
 -------------
 
