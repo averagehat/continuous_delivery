@@ -1,4 +1,4 @@
-.. continous delivery documentation master file, created by
+.. continuous delivery documentation master file, created by
    sphinx-quickstart on Fri Mar 27 15:46:28 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -6,12 +6,12 @@
 Welcome to continuous_delivery's documentation!
 ===============================================
 
-The goal of this project is just to get a simple continous delivery(deployment?)
+The goal of this project is just to get a simple continuous delivery(deployment?)
 setup working between TravisCI and GitHub.
 
 Since Travis gives you a few variables:
 
-- TRAVIS_REPO_SLUG(necrolyte2/continous_delivery)
+- TRAVIS_REPO_SLUG(necrolyte2/continuous_delivery)
 - TRAVIS_BRANCH(master, develop or anything else)
 - TRAVIS_PULL_REQUEST(false or PR number)
 - TRAVIS_TAG(tag or empty)
