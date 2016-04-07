@@ -1,5 +1,5 @@
 __projectname__ = 'continous_delivery'
-__version__ = '0.0.2'
+__version__ = '0.0.4'
 __release__ = __version__
 __authors__ = 'Tyghe Vallard'
 __authoremails__ = 'vallardt@gmail.com'
