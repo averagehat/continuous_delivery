@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.0.6
+-------------
+
+- Unsilence most of release script except the last part
+- No more tag.sh because it is really impossible to enforce what it was doing
+- current_version.py now spits current project version from proj_dir/__init__.py's
+  __version__
+
 Version 0.0.5
 -------------
 
