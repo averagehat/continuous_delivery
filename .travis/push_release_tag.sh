@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]
+then
+    echo "This is a pull request. Skipping release process"
+    exit 0
+fi
+
 if [[ "${TRAVIS_BRANCH}" == "master" ]]
 then
     echo "Not master branch. Skipping release process"
