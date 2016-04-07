@@ -6,7 +6,7 @@ then
     exit 0
 fi
 
-if [[ "${TRAVIS_BRANCH}" == "master" ]]
+if [[ "${TRAVIS_BRANCH}" != "master" ]]
 then
     echo "Not master branch. Skipping release process"
     exit 0
