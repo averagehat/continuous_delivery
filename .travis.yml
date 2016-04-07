@@ -10,7 +10,6 @@ before_script:
     - 'echo "TRAVIS_TAG: $TRAVIS_TAG"'
     - '.travis/master.sh'
     - '.travis/develop.sh'
-    - '.travis/release.sh'
     - '.travis/tag.sh'
 script:
     - nosetests -v tests
