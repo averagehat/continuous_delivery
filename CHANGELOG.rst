@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.0.3
+-------------
+
+- Releases new tag to github automatically when branch is master and 
+  $(basename $TRAVIS_REPO_SLUG)/__init__.py's __version__ is updated
+
 Version 0.0.2
 -------------
 

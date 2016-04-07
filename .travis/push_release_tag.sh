@@ -16,7 +16,7 @@ set -ev
 
 git config --global user.email "builds@travis-ci.org"
 git config --global user.name "Travis CI"
-export GIT_TAG="0.0.3"
+export GIT_TAG=$(python -c "from continuous_delivery import __version__; print __version__;")
 git tag $GIT_TAG -a -m "See [Changelog](CHANGELOG.rst) for all changes"
 # Requires you first make a Personal Access tokens(https://github.com/settings/tokens)
 # Then add GH_TOKEN to https://travis-ci.org/necrolyte2/continuous_delivery/settings
