@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.0.2
+-------------
+
+- RTD and Travis badges and better description of project in README.md
+
 Version 1.0.1
 -------------
 
