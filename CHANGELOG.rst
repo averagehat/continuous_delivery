@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.0.3
+-------------
+
+- Added docs about protecting git branches
+
 Version 1.0.2
 -------------
 
