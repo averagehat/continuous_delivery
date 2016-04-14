@@ -79,15 +79,15 @@ def get_gh_releases(gh_project):
 
 def update_project(project_dir):
     logging.info('Updating {0} remotes'.format(project_dir))
-    sh.git('remote', 'update', _out=sys.stdout, _cwd=project_dir)
+    sh.git('remote', 'update', _err_to_out=True, _out=sys.stdout, _cwd=project_dir)
 
 def reset_branch(project_dir, branch):
     logging.info('Resetting {0} to {1}'.format(project_dir, branch))
-    sh.git('reset', '--hard', branch, _out=sys.stdout, _cwd=project_dir)
+    sh.git('reset', '--hard', branch, _err_to_out=True, _out=sys.stdout, _cwd=project_dir)
 
 def clone_project(git_project_uri, where):
     logging.info('Cloning {0} to {1}'.format(git_project_uri, where))
-    sh.git('clone', git_project_uri, where, _out=sys.stdout)
+    sh.git('clone', git_project_uri, where, _err_to_out=True, _out=sys.stdout)
 
 def install_project(project_dir):
     _cwd = os.getcwd()
@@ -96,15 +96,14 @@ def install_project(project_dir):
     if installer.exists():
         logging.info('Running {0}'.format(installer))
         install = sh.Command(installer)
-        install(_out=sys.stdout)
+        install(_err_to_out=True, _out=sys.stdout)
     else:
         logging.info('{0} does not contain install.sh'.format(project_dir))
     os.chdir(_cwd)
 
-def clone_update(project_dir, git_project_uri):
+def clone(project_dir, git_project_uri):
     if not project_dir.exists():
         clone_project(git_project_uri, project_dir)
-    update_project(project_dir)
 
 def update_origin(project_dir, upstream_uri):
     logging.info(
@@ -114,10 +113,23 @@ def update_origin(project_dir, upstream_uri):
     )
     sh.git('remote', 'set-url', 'origin', upstream_uri, _cwd=project_dir)
 
-def make_software(project_dir, git_project_uri, branch, upstream_uri):
-    clone_update(project_dir, git_project_uri)
+def make_software(project_dir, git_project_uri, branch, upstream_uri, **kwargs):
+    '''
+    :param Path project_dir: project directory to install into
+    :param string git_project_uri: url/path to git project to checkout and install from
+    :param string branch: branch to reset to(use)
+    :param string upstream_uri: Github url for project
+    :param func kwargs[pre_install_hook]: function to execute prior to install_project
+                                          is supplied project_dir as first arg
+    '''
+    clone(project_dir, git_project_uri)
     update_origin(project_dir, upstream_uri)
+    update_project(project_dir)
     reset_branch(project_dir, branch)
+    pre_install_hook = kwargs.get('pre_install_hook')
+    if pre_install_hook:
+        logging.info('Running pre_install_hook {0}'.format(pre_install_hook.func_name))
+        pre_install_hook(project_dir)
     install_project(project_dir)
 
 def make_module(project_dir, modulesdir, modulename=None):
@@ -136,11 +148,35 @@ def make_module(project_dir, modulesdir, modulename=None):
         module_template.substitute(project_dir=project_dir.abspath())
     )
 
-def install(project_dir, git_project_uri, branch, modulesdir, upstream_uri):
-    #make_software(project_dir, git_project_uri, branch, upstream_uri)
+def install(project_dir, git_project_uri, branch, modulesdir, upstream_uri, **kwargs):
+    make_software(project_dir, git_project_uri, branch, upstream_uri, **kwargs)
     make_module(project_dir, modulesdir)
 
+def do_config_yaml(project_dir):
+    '''
+    Temp hack for ngs_mapper config.yaml setup
+    meant as a pre_install_hook for make_software
+    '''
+    config_yaml = project_dir / 'ngs_mapper' / 'config.yaml'
+    config_default = config_yaml + '.default'
+    if not config_default.exists():
+        return
+    config_default.copy(config_yaml) 
+    with config_yaml.in_place() as (reader,writer):
+        for line in reader:
+            if '/path/to/NGSDATA' in line:
+                writer.write(
+                    line.replace(
+                        '/path/to/NGSDATA',
+                        '/media/VD_Research/NGSData'
+                    )
+                )
+            else:
+                writer.write(line)
+
 def main():
+    # Ensure umask isn't something terrible
+    os.umask(022)
     args = parse_args()
     args.modules.makedirs_p()
     project = '/'.join(args.git_project_uri.split('/')[-2:])
@@ -160,16 +196,17 @@ def main():
             args.git_project_uri, project_cache
         )
     )
-    clone_update(project_cache, args.git_project_uri)
+    clone(project_cache, args.git_project_uri)
+    update_project(project_cache)
     # Install/reset/update to latest in develop from origin
     install(
         projdir_latest, git_project_uri, 'origin/develop',
-        args.modules, args.git_project_uri
+        args.modules, args.git_project_uri, pre_install_hook=do_config_yaml
     )
     # Install latest tag(stable)
     install(
         projdir_stable, git_project_uri, tags[0],
-        args.modules, args.git_project_uri
+        args.modules, args.git_project_uri, pre_install_hook=do_config_yaml
     )
 
 if __name__ == '__main__':
