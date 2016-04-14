@@ -101,10 +101,9 @@ def install_project(project_dir):
         logging.info('{0} does not contain install.sh'.format(project_dir))
     os.chdir(_cwd)
 
-def clone_update(project_dir, git_project_uri):
+def clone(project_dir, git_project_uri):
     if not project_dir.exists():
         clone_project(git_project_uri, project_dir)
-    update_project(project_dir)
 
 def update_origin(project_dir, upstream_uri):
     logging.info(
@@ -123,8 +122,9 @@ def make_software(project_dir, git_project_uri, branch, upstream_uri, **kwargs):
     :param func kwargs[pre_install_hook]: function to execute prior to install_project
                                           is supplied project_dir as first arg
     '''
-    clone_update(project_dir, git_project_uri)
+    clone(project_dir, git_project_uri)
     update_origin(project_dir, upstream_uri)
+    update_project(project_dir)
     reset_branch(project_dir, branch)
     pre_install_hook = kwargs.get('pre_install_hook')
     if pre_install_hook:
@@ -191,7 +191,8 @@ def main():
             args.git_project_uri, project_cache
         )
     )
-    clone_update(project_cache, args.git_project_uri)
+    clone(project_cache, args.git_project_uri)
+    update_project(project_cache)
     # Install/reset/update to latest in develop from origin
     install(
         projdir_latest, git_project_uri, 'origin/develop',
