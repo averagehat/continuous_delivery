@@ -40,13 +40,16 @@ What this enforces:
 Setup
 -----
 
-1. Head over to https://github.com/settings/tokens and generate a new token
+1. Ensure you have 2 branches: master and develop
+2. On github, setup branch protection for both branches and enable all checks for both branches
+   Develop can be a little more relaxed and you can allow administrators to merge PR's even if they fail checks
+3. Head over to https://github.com/settings/tokens and generate a new token
    Until a better way is found, we will use Personal Access Tokens
-2. Head over to your project's travis page(https://travis-ci.org/user/project/settings)
+4. Head over to your project's travis page(https://travis-ci.org/user/project/settings)
    and add a new variable GH_TOKEN and the value will be your Github personal access
    token
-3. Copy the .travis directory from this project into your project
-4. Modify your .travis.yml to contain all of the before_script and after_success
+5. Copy the .travis directory from this project into your project
+6. Modify your .travis.yml to contain all of the before_script and after_success
    from this .travis.yml
 
 Contents:

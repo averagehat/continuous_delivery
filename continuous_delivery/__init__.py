@@ -1,5 +1,5 @@
 __projectname__ = 'continuous_delivery'
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 __release__ = __version__
 __authors__ = 'Tyghe Vallard'
 __authoremails__ = 'vallardt@gmail.com'
