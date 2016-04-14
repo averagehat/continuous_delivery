@@ -57,6 +57,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   deploy_module
+
 Indices and tables
 ==================
 
