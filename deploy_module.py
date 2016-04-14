@@ -79,15 +79,15 @@ def get_gh_releases(gh_project):
 
 def update_project(project_dir):
     logging.info('Updating {0} remotes'.format(project_dir))
-    sh.git('remote', 'update', _out=sys.stdout, _cwd=project_dir)
+    sh.git('remote', 'update', _err_to_out=True, _out=sys.stdout, _cwd=project_dir)
 
 def reset_branch(project_dir, branch):
     logging.info('Resetting {0} to {1}'.format(project_dir, branch))
-    sh.git('reset', '--hard', branch, _out=sys.stdout, _cwd=project_dir)
+    sh.git('reset', '--hard', branch, _err_to_out=True, _out=sys.stdout, _cwd=project_dir)
 
 def clone_project(git_project_uri, where):
     logging.info('Cloning {0} to {1}'.format(git_project_uri, where))
-    sh.git('clone', git_project_uri, where, _out=sys.stdout)
+    sh.git('clone', git_project_uri, where, _err_to_out=True, _out=sys.stdout)
 
 def install_project(project_dir):
     _cwd = os.getcwd()
@@ -96,7 +96,7 @@ def install_project(project_dir):
     if installer.exists():
         logging.info('Running {0}'.format(installer))
         install = sh.Command(installer)
-        install(_out=sys.stdout)
+        install(_err_to_out=True, _out=sys.stdout)
     else:
         logging.info('{0} does not contain install.sh'.format(project_dir))
     os.chdir(_cwd)
@@ -137,7 +137,7 @@ def make_module(project_dir, modulesdir, modulename=None):
     )
 
 def install(project_dir, git_project_uri, branch, modulesdir, upstream_uri):
-    #make_software(project_dir, git_project_uri, branch, upstream_uri)
+    make_software(project_dir, git_project_uri, branch, upstream_uri)
     make_module(project_dir, modulesdir)
 
 def main():
