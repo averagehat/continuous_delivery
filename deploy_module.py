@@ -158,7 +158,10 @@ def do_config_yaml(project_dir):
     meant as a pre_install_hook for make_software
     '''
     config_yaml = project_dir / 'ngs_mapper' / 'config.yaml'
-    (config_yaml + '.default').copy(config_yaml) 
+    config_default = config_yaml + '.default'
+    if not config_default.exists():
+        return
+    config_default.copy(config_yaml) 
     with config_yaml.in_place() as (reader,writer):
         for line in reader:
             if '/path/to/NGSDATA' in line:
@@ -172,6 +175,8 @@ def do_config_yaml(project_dir):
                 writer.write(line)
 
 def main():
+    # Ensure umask isn't something terrible
+    os.umask(022)
     args = parse_args()
     args.modules.makedirs_p()
     project = '/'.join(args.git_project_uri.split('/')[-2:])
