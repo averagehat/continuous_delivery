@@ -114,10 +114,22 @@ def update_origin(project_dir, upstream_uri):
     )
     sh.git('remote', 'set-url', 'origin', upstream_uri, _cwd=project_dir)
 
-def make_software(project_dir, git_project_uri, branch, upstream_uri):
+def make_software(project_dir, git_project_uri, branch, upstream_uri, **kwargs):
+    '''
+    :param Path project_dir: project directory to install into
+    :param string git_project_uri: url/path to git project to checkout and install from
+    :param string branch: branch to reset to(use)
+    :param string upstream_uri: Github url for project
+    :param func kwargs[pre_install_hook]: function to execute prior to install_project
+                                          is supplied project_dir as first arg
+    '''
     clone_update(project_dir, git_project_uri)
     update_origin(project_dir, upstream_uri)
     reset_branch(project_dir, branch)
+    pre_install_hook = kwargs.get('pre_install_hook')
+    if pre_install_hook:
+        logging.info('Running pre_install_hook {0}'.format(pre_install_hook.func_name))
+        pre_install_hook(project_dir)
     install_project(project_dir)
 
 def make_module(project_dir, modulesdir, modulename=None):
@@ -136,9 +148,28 @@ def make_module(project_dir, modulesdir, modulename=None):
         module_template.substitute(project_dir=project_dir.abspath())
     )
 
-def install(project_dir, git_project_uri, branch, modulesdir, upstream_uri):
-    make_software(project_dir, git_project_uri, branch, upstream_uri)
+def install(project_dir, git_project_uri, branch, modulesdir, upstream_uri, **kwargs):
+    make_software(project_dir, git_project_uri, branch, upstream_uri, **kwargs)
     make_module(project_dir, modulesdir)
+
+def do_config_yaml(project_dir):
+    '''
+    Temp hack for ngs_mapper config.yaml setup
+    meant as a pre_install_hook for make_software
+    '''
+    config_yaml = project_dir / 'ngs_mapper' / 'config.yaml'
+    (config_yaml + '.default').copy(config_yaml) 
+    with config_yaml.in_place() as (reader,writer):
+        for line in reader:
+            if '/path/to/NGSDATA' in line:
+                writer.write(
+                    line.replace(
+                        '/path/to/NGSDATA',
+                        '/media/VD_Research/NGSData'
+                    )
+                )
+            else:
+                writer.write(line)
 
 def main():
     args = parse_args()
@@ -164,12 +195,12 @@ def main():
     # Install/reset/update to latest in develop from origin
     install(
         projdir_latest, git_project_uri, 'origin/develop',
-        args.modules, args.git_project_uri
+        args.modules, args.git_project_uri, pre_install_hook=do_config_yaml
     )
     # Install latest tag(stable)
     install(
         projdir_stable, git_project_uri, tags[0],
-        args.modules, args.git_project_uri
+        args.modules, args.git_project_uri, pre_install_hook=do_config_yaml
     )
 
 if __name__ == '__main__':

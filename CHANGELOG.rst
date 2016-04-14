@@ -6,6 +6,8 @@ Version 1.0.4
 
 - Added deploy_module script which installs tags from github and then builds
   environmental module for it
+- Fixed deploy script so it actually works
+- Hack/fix to set config.yaml NGSData path which is specific to us
 
 Version 1.0.3
 -------------
